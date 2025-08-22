@@ -1,0 +1,3981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #14b8a6;
+            --primary-dark: #0f766e;
+            --secondary-color: #f97316;
+            --student-color: #8b5cf6;
+            --student-dark: #7c3aed;
+            --faculty-color: #ec4899;
+            --faculty-dark: #db2777;
+            --admin-color: #f59e0b;
+            --admin-dark: #d97706;
+            --report-color: #6366f1;
+            --report-dark: #4f46e5;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            display: flex;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        }
+
+        .login-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon::before {
+            content: "🎓";
+            font-size: 1.5rem;
+        }
+
+        .welcome-text h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-text p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .login-right {
+            flex: 1;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .login-icon.admin {
+            background: var(--admin-color);
+        }
+        
+        .login-icon.student {
+            background: var(--student-color);
+        }
+        
+        .login-icon.faculty {
+            background: var(--faculty-color);
+        }
+
+        .login-type-selector {
+            display: flex;
+            background: var(--background);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-type-btn {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .login-type-btn.active {
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .login-btn.student {
+            background: var(--student-color);
+        }
+        
+        .login-btn.student:hover {
+            background: var(--student-dark);
+        }
+        
+        .login-btn.admin {
+            background: var(--admin-color);
+        }
+        
+        .login-btn.admin:hover {
+            background: var(--admin-dark);
+        }
+        
+        .login-btn.faculty {
+            background: var(--faculty-color);
+        }
+        
+        .login-btn.faculty:hover {
+            background: var(--faculty-dark);
+        }
+
+        .login-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-actions button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+            background: var(--background);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--background);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 0 25px 25px 0;
+            margin-right: 1rem;
+        }
+        
+        .nav-item.student-active {
+            background: var(--student-color);
+        }
+        
+        .nav-item.faculty-active {
+            background: var(--faculty-color);
+        }
+        
+        .nav-item.admin-active {
+            background: var(--admin-color);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .user-avatar.student {
+            background: var(--student-color);
+        }
+        
+        .user-avatar.faculty {
+            background: var(--faculty-color);
+        }
+        
+        .user-avatar.admin {
+            background: var(--admin-color);
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-details span:first-child {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-details span:last-child {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .header-btn:hover {
+            background: var(--background);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--error);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-info {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-role {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .module-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon.student {
+            background: var(--student-color);
+        }
+        
+        .stat-icon.faculty {
+            background: var(--faculty-color);
+        }
+        
+        .stat-icon.admin {
+            background: var(--admin-color);
+        }
+
+        .stat-info h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .dashboard-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-header a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+
+        .recent-info h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .recent-info p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-badge.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .experience-badge {
+            padding: 0.25rem 0.75rem;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .module-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .add-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s;
+            margin-left: 10px;
+        }
+
+        .add-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .add-btn.student {
+            background: var(--student-color);
+        }
+        
+        .add-btn.student:hover {
+            background: var(--student-dark);
+        }
+        
+        .add-btn.faculty {
+            background: var(--faculty-color);
+        }
+        
+        .add-btn.faculty:hover {
+            background: var(--faculty-dark);
+        }
+        
+        .add-btn.admin {
+            background: var(--admin-color);
+        }
+        
+        .add-btn.admin:hover {
+            background: var(--admin-dark);
+        }
+        
+        .add-btn.report {
+            background: var(--report-color);
+        }
+        
+        .add-btn.report:hover {
+            background: var(--report-dark);
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--surface);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .search-bar select {
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--surface);
+            min-width: 150px;
+        }
+
+        .form-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .form-content {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid input,
+        .form-grid select,
+        .form-grid textarea {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--surface);
+        }
+
+        .form-grid input:focus,
+        .form-grid select:focus,
+        .form-grid textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .form-actions button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .form-actions button[type="submit"] {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .form-actions button[type="submit"]:hover {
+            background: var(--primary-dark);
+        }
+        
+        .form-actions button[type="submit"].student {
+            background: var(--student-color);
+        }
+        
+        .form-actions button[type="submit"].student:hover {
+            background: var(--student-dark);
+        }
+        
+        .form-actions button[type="submit"].faculty {
+            background: var(--faculty-color);
+        }
+        
+        .form-actions button[type="submit"].faculty:hover {
+            background: var(--faculty-dark);
+        }
+        
+        .form-actions button[type="submit"].admin {
+            background: var(--admin-color);
+        }
+        
+        .form-actions button[type="submit"].admin:hover {
+            background: var(--admin-dark);
+        }
+        
+        .form-actions button[type="submit"].report {
+            background: var(--report-color);
+        }
+        
+        .form-actions button[type="submit"].report:hover {
+            background: var(--report-dark);
+        }
+
+        .cancel-btn {
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+
+        .cancel-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .data-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .data-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .data-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .data-field h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .data-field p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .data-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--background);
+            color: var(--text-secondary);
+        }
+
+        .action-btn:hover {
+            background: var(--border);
+        }
+
+        .action-btn.delete {
+            background: #fef2f2;
+            color: var(--error);
+        }
+
+        .action-btn.delete:hover {
+            background: #fee2e2;
+        }
+
+        /* Student Results Styles */
+        .results-container {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-item h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item p {
+            color: var(--text-secondary);
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-table th {
+            background: var(--background);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .grade-a {
+            color: #166534;
+            font-weight: 600;
+        }
+
+        .grade-b {
+            color: #ca8a04;
+            font-weight: 600;
+        }
+
+        .grade-c {
+            color: #c2410c;
+            font-weight: 600;
+        }
+
+        .grade-f {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .summary-card {
+            background: var(--background);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-item h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-item p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .summary-item p.student {
+            color: var(--student-color);
+        }
+
+        /* Report Styles */
+        .report-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card-small {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .stat-icon-small {
+            font-size: 1.5rem;
+        }
+
+        .stat-info h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .report-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .report-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .report-title h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .report-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .report-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .priority-badge,
+        .category-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .priority-badge.low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .priority-badge.medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .priority-badge.high {
+            background: #fed7aa;
+            color: #c2410c;
+        }
+
+        .priority-badge.critical {
+            background: #fecaca;
+            color: #dc2626;
+        }
+
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.in-progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-badge.resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .category-badge {
+            background: #f3f4f6;
+            color: var(--text-secondary);
+        }
+
+        .report-description {
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .report-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .report-footer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .reporter-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .status-update-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .status-update-btn:hover {
+            background: #2563eb;
+        }
+
+        /* Feedback Styles */
+        .feedback-section {
+            width: 100%;
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .feedback-section p {
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .feedback-form-container {
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             gap: 1rem;
+        }
+        
+        .feedback-stars .star {
+            font-size: 1.5rem;
+            color: var(--border);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .feedback-stars .star:hover,
+        .feedback-stars .star.selected {
+            color: var(--admin-color);
+        }
+        
+        .submit-feedback-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            background: var(--report-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .feedback-display {
+             display: flex;
+             align-items: center;
+             gap: 0.5rem;
+        }
+
+        /* Anonymous Report Form Styles */
+        .anonymous-form {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .anonymous-info {
+            background: #f0f9ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--report-color);
+        }
+
+        .anonymous-info h4 {
+            color: var(--report-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .anonymous-info p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--report-color);
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--surface);
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--report-color);
+        }
+
+        .submit-report-btn {
+            background: var(--report-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-report-btn:hover {
+            background: var(--report-dark);
+        }
+
+        /* Print styles for results */
+        @media print {
+            .sidebar, .header, .add-btn, .data-actions {
+                display: none !important;
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            
+            .results-container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s;
+            }
+
+            .sidebar.mobile-open {
+                left: 0;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .data-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .student-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .add-btn {
+                margin-left: 0;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+            
+            .search-bar select {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .login-left {
+                flex: none;
+                padding: 1rem;
+            }
+
+            .welcome-text h1 {
+                font-size: 2rem;
+            }
+
+            .content-area {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+            
+            .header-right {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 0.5rem;
+            }
+            
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        .spinner.student {
+            border-top: 3px solid var(--student-color);
+        }
+        
+        .spinner.faculty {
+            border-top: 3px solid var(--faculty-color);
+        }
+        
+        .spinner.admin {
+            border-top: 3px solid var(--admin-color);
+        }
+        
+        .spinner.report {
+            border-top: 3px solid var(--report-color);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Access control */
+        .admin-only {
+            display: none;
+        }
+        
+        .role-admin .admin-only {
+            display: block;
+        }
+        
+        .role-admin .admin-only-flex {
+            display: flex;
+        }
+        
+        .role-student .student-only {
+            display: block;
+        }
+        
+        .role-student .student-hide {
+            display: none;
+        }
+        
+        .role-faculty .faculty-only {
+            display: block;
+        }
+        
+        .role-faculty .faculty-hide {
+            display: none;
+        }
+        
+        /* Message styles */
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #16a34a;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #ef4444;
+        }
+        
+        /* Dark mode styles */
+        body.dark-theme {
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+        }
+        
+        body.dark-theme .login-icon {
+            background: var(--primary-dark);
+        }
+        
+        body.dark-theme .login-icon.admin {
+            background: var(--admin-dark);
+        }
+        
+        body.dark-theme .login-icon.student {
+            background: var(--student-dark);
+        }
+        
+        body.dark-theme .login-icon.faculty {
+            background: var(--faculty-dark);
+        }
+        
+        body.dark-theme .login-type-selector {
+            background: #1e293b;
+        }
+        
+        body.dark-theme .login-type-btn.active {
+            background: #0f172a;
+        }
+        
+        body.dark-theme .stat-card-small {
+            background: #1e293b;
+        }
+        
+        body.dark-theme .category-badge {
+            background: #334155;
+            color: #94a3b8;
+        }
+        
+        body.dark-theme .anonymous-info {
+            background: #1e3a8a;
+        }
+        
+        /* Table styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .data-table th {
+            background: var(--background);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-table tr:hover {
+            background: var(--background);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginScreen" class="login-container">
+        <div class="login-left">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <span>Zero Factorial</span>
+            </div>
+            <div class="welcome-text">
+                <h1 id="welcomeTitle">Welcome back!</h1>
+                <p>Login to<br>continue access</p>
+            </div>
+        </div>
+        <div class="login-right">
+            <button class="close-btn">&times;</button>
+            <div class="login-form">
+                <div class="login-header">
+                    <div class="login-icon" id="loginTypeIcon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h2 id="loginTypeTitle">Faculty Login</h2>
+                </div>
+
+                <div class="login-type-selector">
+                    <div class="login-type-btn active" data-type="faculty">Faculty</div>
+                    <div class="login-type-btn" data-type="admin">Admin</div>
+                    <div class="login-type-btn" data-type="student">Student</div>
+                </div>
+
+                <form id="loginForm">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="Username" required autocomplete="username">
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="showPassword">
+                        <label for="showPassword">Show Password</label>
+                    </div>
+
+                    <button type="submit" class="login-btn" id="loginButton">
+                        <span id="loginBtnText">Login</span>
+                        <span id="loginSpinner" class="spinner" style="display: none;"></span>
+                    </button>
+
+                    <div class="login-actions">
+                        <button type="button" id="resetBtn">Reset</button>
+                        <button type="button" id="forgotBtn">Forgot password?</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard" class="dashboard-container" style="display: none">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    <span>Zero Factorial</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-module="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item faculty-hide admin-hide" data-module="courses">
+                    <i class="fas fa-book"></i>
+                    <span>Courses</span>
+                </a>
+                <a href="#" class="nav-item faculty-hide admin-hide" data-module="subjects">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Subjects</span>
+                </a>
+                <a href="#" class="nav-item faculty-hide admin-hide" data-module="students">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Students</span>
+                </a>
+                <a href="#" class="nav-item student-hide" data-module="faculty">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Faculty</span>
+                </a>
+                <a href="#" class="nav-item student-hide" data-module="attendance">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Attendance</span>
+                </a>
+                <a href="#" class="nav-item student-hide" data-module="marks">
+                    <i class="fas fa-award"></i>
+                    <span>Marks</span>
+                </a>
+                <a href="#" class="nav-item student-only" data-module="results">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>My Results</span>
+                </a>
+                <a href="#" class="nav-item admin-only student-hide" data-module="email">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </a>
+                <a href="#" class="nav-item admin-only student-hide" data-module="users">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="#" class="nav-item" data-module="reports">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Anonymous Reports</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">
+                        <span id="userInitials">RS</span>
+                    </div>
+                    <div class="user-details">
+                        <span id="userName">Dr. Singh</span>
+                        <span id="userType">Faculty</span>
+                    </div>
+                </div>
+                <a href="#" class="nav-item" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions student-hide">
+                        <button class="header-btn" onclick="toggleTheme()">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <button class="header-btn" onclick="showNotifications()">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name" id="headerUserName">Dr. Singh</div>
+                        <div class="user-role" id="headerUserRole">Faculty</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area" id="contentArea">
+                <div id="dashboardContent" class="module-content">
+                    <div class="welcome-section">
+                        <h1>
+                            Welcome back, <span id="welcomeUserName">Dr. Singh</span>
+                        </h1>
+                        <p>Here's what's happening in your institution today.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card" data-module="students">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Students</h3>
+                                <div class="stat-number" id="studentsCount">0</div>
+                                <p>Active students</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" data-module="faculty">
+                            <div class="stat-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Faculty Members</h3>
+                                <div class="stat-number" id="facultyCount">0</div>
+                                <p>Teaching staff</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" data-module="courses">
+                            <div class="stat-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Active Courses</h3>
+                                <div class="stat-number" id="coursesCount">0</div>
+                                <p>Available programs</p>
+                            </div>
+                        </div>
+                        <div class="stat-card" data-module="subjects">
+                            <div class="stat-icon">
+                                <i class="fas fa-bookmark"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Subjects</h3>
+                                <div class="stat-number" id="subjectsCount">0</div>
+                                <p>Course subjects</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Recent Students</h3>
+                                <a href="#" onclick="switchModule('students')">View all</a>
+                            </div>
+                            <div class="recent-list" id="recentStudents">
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>Faculty Overview</h3>
+                                <a href="#" onclick="switchModule('faculty')">View all</a>
+                            </div>
+                            <div class="recent-list" id="recentFaculty">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="resultsContent" class="module-content" style="display: none">
+                    <div class="module-header">
+                        <h2>My Academic Results</h2>
+                        <button class="add-btn student" onclick="window.print()">
+                            <i class="fas fa-print"></i>
+                            Print Results
+                        </button>
+                    </div>
+                    
+                    <div class="results-container">
+                        <div class="student-info">
+                            <div class="info-item">
+                                <h4>Student Name</h4>
+                                <p id="resultStudentName">Arjun Kumar</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>Student ID</h4>
+                                <p id="resultStudentId">S12345</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>Course</h4>
+                                <p id="resultStudentCourse">Computer Science</p>
+                            </div>
+                            <div class="info-item">
+                                <h4>Semester</h4>
+                                <p id="resultStudentSemester">Spring 2023</p>
+                            </div>
+                        </div>
+                        
+                        <h3>Subject-wise Performance</h3>
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject Code</th>
+                                    <th>Subject Name</th>
+                                    <th>Credits</th>
+                                    <th>Marks Obtained</th>
+                                    <th>Maximum Marks</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsTableBody">
+                            </tbody>
+                        </table>
+                        
+                        <div class="summary-card">
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <h4>Total Credits</h4>
+                                    <p class="student" id="totalCredits">0</p>
+                                </div>
+                                <div class="summary-item">
+                                    <h4>CGPA</h4>
+                                    <p class="student" id="studentCGPA">0.0</p>
+                                </div>
+                                <div class="summary-item">
+                                    <h4>Overall Percentage</h4>
+                                    <p class="student" id="studentPercentage">0%</p>
+                                </div>
+                                <div class="summary-item">
+                                    <h4>Result Status</h4>
+                                    <p class="student" id="resultStatus">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="coursesContent" class="module-content faculty-hide admin-hide" style="display: none">
+                    <div class="module-header">
+                        <h2>Course Management</h2>
+                        <button class="add-btn admin-only" onclick="showAddForm('course')">
+                            <i class="fas fa-plus"></i>
+                            Add Course
+                        </button>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-tab="course-list">Course List</div>
+                        <div class="tab" data-tab="add-course">Add New Course</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="course-list">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="courseSearch" placeholder="Search courses..." oninput="searchData('courses', this.value)">
+                            <select id="courseFilter">
+                                <option value="all">All Departments</option>
+                                <option value="cs">Computer Science</option>
+                                <option value="it">Information Technology</option>
+                                <option value="ece">Electronics</option>
+                                <option value="mech">Mechanical</option>
+                            </select>
+                        </div>
+                        
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Department</th>
+                                    <th>Duration</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="tab-content" id="add-course">
+                        <div class="anonymous-form">
+                            <h3>Add New Course</h3>
+                            <form id="courseForm">
+                                <div class="form-grid">
+                                    <div class="input-group">
+                                        <i class="fas fa-code"></i>
+                                        <input type="text" id="courseCode" placeholder="Course Code" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <i class="fas fa-book"></i>
+                                        <input type="text" id="courseName" placeholder="Course Name" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <i class="fas fa-building"></i>
+                                        <select id="courseDepartment" required>
+                                            <option value="">Select Department</option>
+                                            <option value="cs">Computer Science</option>
+                                            <option value="it">Information Technology</option>
+                                            <option value="ece">Electronics</option>
+                                            <option value="mech">Mechanical</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <i class="fas fa-clock"></i>
+                                        <input type="text" id="courseDuration" placeholder="Duration (e.g., 4 years)" required>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="cancel-btn" onclick="switchTab('course-list')">Cancel</button>
+                                    <button type="submit" class="add-btn admin">Add Course</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="subjectsContent" class="module-content faculty-hide admin-hide" style="display: none">
+                    <div class="module-header">
+                        <h2>Subject Management</h2>
+                        <button class="add-btn admin-only" onclick="showAddForm('subject')">
+                            <i class="fas fa-plus"></i>
+                            Add Subject
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="subjectSearch" placeholder="Search subjects..." oninput="searchData('subjects', this.value)">
+                        <select id="subjectFilter">
+                            <option value="all">All Courses</option>
+                            <option value="btech">B.Tech</option>
+                            <option value="mtech">M.Tech</option>
+                            <option value="bca">BCA</option>
+                            <option value="mca">MCA</option>
+                        </select>
+                    </div>
+                    <div class="data-list" id="subjectsList">
+                    </div>
+                </div>
+
+                <div id="studentsContent" class="module-content faculty-hide admin-hide" style="display: none">
+                    <div class="module-header">
+                        <h2>Student Management</h2>
+                        <button class="add-btn admin-only" onclick="showAddForm('student')">
+                            <i class="fas fa-plus"></i>
+                            Add Student
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="studentSearch" placeholder="Search students..." oninput="searchData('students', this.value)">
+                        <select id="studentFilter">
+                            <option value="all">All Courses</option>
+                            <option value="cs">Computer Science</option>
+                            <option value="it">IT</option>
+                            <option value="ece">Electronics</option>
+                            <option value="mech">Mechanical</option>
+                        </select>
+                    </div>
+                    <div class="data-list" id="studentsList">
+                    </div>
+                </div>
+
+                <div id="facultyContent" class="module-content student-hide" style="display: none">
+                    <div class="module-header">
+                        <h2>Faculty Management</h2>
+                        <button class="add-btn admin-only" onclick="showAddForm('faculty')">
+                            <i class="fas fa-plus"></i>
+                            Add Faculty
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="facultySearch" placeholder="Search faculty..." oninput="searchData('faculty', this.value)">
+                        <select id="facultyFilter">
+                            <option value="all">All Departments</option>
+                            <option value="cs">Computer Science</option>
+                            <option value="it">IT</option>
+                            <option value="math">Mathematics</option>
+                            <option value="phy">Physics</option>
+                        </select>
+                    </div>
+                    <div class="data-list" id="facultyList">
+                    </div>
+                </div>
+
+                <div id="attendanceContent" class="module-content student-hide" style="display: none">
+                    <div class="module-header">
+                        <h2>Attendance Management</h2>
+                        <button class="add-btn faculty-only" onclick="showAddForm('attendance')">
+                            <i class="fas fa-plus"></i>
+                            Mark Attendance
+                        </button>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-tab="mark-attendance">Mark Attendance</div>
+                        <div class="tab" data-tab="view-attendance">View Records</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="mark-attendance">
+                        <div class="anonymous-form">
+                            <h3>Mark Attendance for Class</h3>
+                            <form id="attendanceForm">
+                                <div class="form-grid">
+                                    <div class="input-group">
+                                        <i class="fas fa-calendar"></i>
+                                        <input type="date" id="attendanceDate" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <i class="fas fa-book"></i>
+                                        <select id="attendanceSubject" required>
+                                            <option value="">Select Subject</option>
+                                            <option value="cs101">CS101 - Programming</option>
+                                            <option value="math101">MATH101 - Calculus</option>
+                                            <option value="phy101">PHY101 - Physics</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <i class="fas fa-clock"></i>
+                                        <select id="attendancePeriod" required>
+                                            <option value="">Select Period</option>
+                                            <option value="1">Period 1</option>
+                                            <option value="2">Period 2</option>
+                                            <option value="3">Period 3</option>
+                                            <option value="4">Period 4</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <h4 style="margin: 1.5rem 0 1rem;">Student Attendance</h4>
+                                
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Student ID</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendanceMarkingTable">
+                                        <tr>
+                                            <td>S1001</td>
+                                            <td>John Doe</td>
+                                            <td>
+                                                <select class="attendance-status">
+                                                    <option value="present">Present</option>
+                                                    <option value="absent">Absent</option>
+                                                    <option value="late">Late</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>S1002</td>
+                                            <td>Jane Smith</td>
+                                            <td>
+                                                <select class="attendance-status">
+                                                    <option value="present">Present</option>
+                                                    <option value="absent">Absent</option>
+                                                    <option value="late">Late</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>S1003</td>
+                                            <td>Robert Johnson</td>
+                                            <td>
+                                                <select class="attendance-status">
+                                                    <option value="present">Present</option>
+                                                    <option value="absent">Absent</option>
+                                                    <option value="late">Late</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                                <div class="form-actions" style="margin-top: 1.5rem;">
+                                    <button type="button" class="cancel-btn">Cancel</button>
+                                    <button type="submit" class="add-btn faculty">Submit Attendance</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="view-attendance">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="attendanceSearch" placeholder="Search attendance..." oninput="searchData('attendance', this.value)">
+                            <select id="attendanceFilter">
+                                <option value="all">All Records</option>
+                                <option value="present">Present</option>
+                                <option value="absent">Absent</option>
+                                <option value="late">Late</option>
+                            </select>
+                        </div>
+                        <div class="data-list" id="attendanceList">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="marksContent" class="module-content student-hide" style="display: none">
+                    <div class="module-header">
+                        <h2>Marks Management</h2>
+                        <button class="add-btn faculty-only" onclick="showAddForm('marks')">
+                            <i class="fas fa-plus"></i>
+                            Add Marks
+                        </button>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-tab="enter-marks">Enter Marks</div>
+                        <div class="tab" data-tab="view-marks">View Marks</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="enter-marks">
+                        <div class="anonymous-form">
+                            <h3>Enter Student Marks</h3>
+                            <form id="marksForm">
+                                <div class="form-grid">
+                                    <div class="input-group">
+                                        <i class="fas fa-book"></i>
+                                        <select id="marksSubject" required>
+                                            <option value="">Select Subject</option>
+                                            <option value="cs101">CS101 - Programming</option>
+                                            <option value="math101">MATH101 - Calculus</option>
+                                            <option value="phy101">PHY101 - Physics</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <i class="fas fa-tasks"></i>
+                                        <select id="marksExamType" required>
+                                            <option value="">Select Exam Type</option>
+                                            <option value="midterm">Mid Term</option>
+                                            <option value="final">Final Exam</option>
+                                            <option value="assignment">Assignment</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <i class="fas fa-calendar"></i>
+                                        <input type="date" id="marksDate" required>
+                                    </div>
+                                    <div class="input-group">
+                                        <i class="fas fa-sort-numeric-up"></i>
+                                        <input type="number" id="maxMarks" placeholder="Maximum Marks" required>
+                                    </div>
+                                </div>
+                                
+                                <h4 style="margin: 1.5rem 0 1rem;">Student Marks</h4>
+                                
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Student ID</th>
+                                            <th>Name</th>
+                                            <th>Marks Obtained</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="marksEntryTable">
+                                        <tr>
+                                            <td>S1001</td>
+                                            <td>John Doe</td>
+                                            <td>
+                                                <input type="number" class="marks-obtained" min="0" max="100" placeholder="Marks">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>S1002</td>
+                                            <td>Jane Smith</td>
+                                            <td>
+                                                <input type="number" class="marks-obtained" min="0" max="100" placeholder="Marks">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>S1003</td>
+                                            <td>Robert Johnson</td>
+                                            <td>
+                                                <input type="number" class="marks-obtained" min="0" max="100" placeholder="Marks">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                                <div class="form-actions" style="margin-top: 1.5rem;">
+                                    <button type="button" class="cancel-btn">Cancel</button>
+                                    <button type="submit" class="add-btn faculty">Submit Marks</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="view-marks">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="marksSearch" placeholder="Search marks..." oninput="searchData('marks', this.value)">
+                            <select id="marksFilter">
+                                <option value="all">All Records</option>
+                                <option value="midterm">Mid Term</option>
+                                <option value="final">Final Exam</option>
+                                <option value="assignment">Assignments</option>
+                            </select>
+                        </div>
+                        <div class="data-list" id="marksList">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="reportsContent" class="module-content" style="display: none">
+                    <div class="module-header">
+                        <h2>Anonymous Reporting System</h2>
+                        <button class="add-btn report" onclick="showAnonymousReportForm()">
+                            <i class="fas fa-plus"></i>
+                            Submit Anonymous Report
+                        </button>
+                    </div>
+                    
+                    <div id="anonymousReportForm" class="anonymous-form" style="display: none;">
+                        <div class="anonymous-info">
+                            <h4><i class="fas fa-shield-alt"></i> Your Privacy is Protected</h4>
+                            <p>All reports are completely anonymous. No identifying information is collected or stored.</p>
+                        </div>
+                        
+                        <form id="reportForm">
+                            <div class="form-group">
+                                <label for="reportCategory">Category</label>
+                                <select id="reportCategory" required>
+                                    <option value="">Select a category</option>
+                                    <option value="academic">Academic Issues</option>
+                                    <option value="faculty">Faculty Concerns</option>
+                                    <option value="infrastructure">Infrastructure Problems</option>
+                                    <option value="harassment">Harassment/Bullying</option>
+                                    <option value="safety">Safety Concerns</option>
+                                    <option value="administrative">Administrative Issues</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reportPriority">Priority Level</label>
+                                <select id="reportPriority" required>
+                                    <option value="">Select priority</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reportDescription">Description</label>
+                                <textarea id="reportDescription" placeholder="Please provide detailed information about your concern..." required></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="cancel-btn" onclick="hideAnonymousReportForm()">Cancel</button>
+                                <button type="submit" class="submit-report-btn report">
+                                    <span id="submitReportText">Submit Anonymously</span>
+                                    <span id="reportSpinner" class="spinner report" style="display: none;"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="report-stats">
+                        <div class="stat-card-small">
+                            <div class="stat-icon-small">📋</div>
+                            <div class="stat-info">
+                                <h4>Total Reports</h4>
+                                <span id="totalReports">12</span>
+                            </div>
+                        </div>
+                        <div class="stat-card-small">
+                            <div class="stat-icon-small">⏳</div>
+                            <div class="stat-info">
+                                <h4>Pending</h4>
+                                <span id="pendingReports">3</span>
+                            </div>
+                        </div>
+                        <div class="stat-card-small">
+                            <div class="stat-icon-small">🔄</div>
+                            <div class="stat-info">
+                                <h4>In Progress</h4>
+                                <span id="inProgressReports">5</span>
+                            </div>
+                        </div>
+                        <div class="stat-card-small">
+                            <div class="stat-icon-small">✅</div>
+                            <div class="stat-info">
+                                <h4>Resolved</h4>
+                                <span id="resolvedReports">4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="reportsSearch" placeholder="Search reports..." oninput="searchData('reports', this.value)">
+                        <select id="reportsFilter">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="inprogress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                    </div>
+                    
+                    <div class="data-list" id="reportsList">
+                    </div>
+                </div>
+
+                <div id="emailContent" class="module-content admin-only student-hide" style="display: none">
+                    <div class="module-header">
+                        <h2>Email Management</h2>
+                        <button class="add-btn" onclick="showAddForm('email')">
+                            <i class="fas fa-plus"></i>
+                            Compose Email
+                        </button>
+                    </div>
+                    <div class="data-list" id="emailList">
+                    </div>
+                </div>
+
+                <div id="usersContent" class="module-content admin-only student-hide" style="display: none">
+                    <div class="module-header">
+                        <h2>User Management</h2>
+                        <button class="add-btn" onclick="showAddForm('user')">
+                            <i class="fas fa-plus"></i>
+                            Add User
+                        </button>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="userSearch" placeholder="Search users..." oninput="searchData('users', this.value)">
+                    </div>
+                    <div class="data-list" id="usersList">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Improved College Management System JavaScript
+        // Global variables
+        let currentUser = null;
+        let currentUserType = null;
+        let currentModule = "dashboard";
+
+        // Data storage
+        let students = [];
+        let faculty = [];
+        let courses = [];
+        let subjects = [];
+        let attendance = [];
+        let marks = [];
+        let emails = [];
+        let users = [];
+        let reports = [];
+        let studentResults = {};
+
+        // DOM elements
+        const loginScreen = document.getElementById("loginScreen");
+        const dashboard = document.getElementById("dashboard");
+        const loginForm = document.getElementById("loginForm");
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        const showPasswordCheckbox = document.getElementById("showPassword");
+        const loginTypeButtons = document.querySelectorAll(".login-type-btn");
+        const loginTypeTitle = document.getElementById("loginTypeTitle");
+        const loginTypeIcon = document.getElementById("loginTypeIcon");
+        const welcomeTitle = document.getElementById("welcomeTitle");
+        const loginBtnText = document.getElementById("loginBtnText");
+        const loginSpinner = document.getElementById("loginSpinner");
+        const loginButton = document.getElementById("loginButton");
+
+        // Initialize app
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeApp();
+            setupEventListeners();
+            loadSampleData();
+        });
+
+        function initializeApp() {
+            loadAllData();
+            updateStatsCounts();
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem("cms_theme");
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-theme");
+                const themeBtn = document.querySelector(".header-btn i.fa-moon");
+                if (themeBtn) {
+                    themeBtn.className = "fas fa-sun";
+                }
+            }
+            
+            // Check if user is already logged in
+            const savedUser = sessionStorage.getItem("currentUser");
+            if (savedUser) {
+                const userData = JSON.parse(savedUser);
+                currentUser = userData.name;
+                currentUserType = userData.type;
+                showDashboard();
+            }
+        }
+
+        function setupEventListeners() {
+            // Login form
+            loginForm.addEventListener("submit", handleLogin);
+            showPasswordCheckbox.addEventListener("change", togglePasswordVisibility);
+            document.getElementById("resetBtn").addEventListener("click", resetForm);
+
+            // Login type selection
+            loginTypeButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const type = button.dataset.type;
+                    loginTypeButtons.forEach(btn => btn.classList.remove("active"));
+                    button.classList.add("active");
+                    updateLoginUI(type);
+                });
+            });
+
+            // Navigation
+            document.querySelectorAll(".nav-item").forEach((item) => {
+                item.addEventListener("click", handleNavigation);
+            });
+
+            // Logout
+            document.getElementById("logoutBtn").addEventListener("click", handleLogout);
+
+            // Stat cards click
+            document.querySelectorAll(".stat-card").forEach((card) => {
+                card.addEventListener("click", function () {
+                    const module = this.dataset.module;
+                    if (module) {
+                        switchModule(module);
+                    }
+                });
+            });
+            
+            // Anonymous report form
+            document.getElementById("reportForm").addEventListener("submit", handleAnonymousReport);
+            
+            // Course form
+            document.getElementById("courseForm").addEventListener("submit", handleCourseSubmit);
+            
+            // Attendance form
+            document.getElementById("attendanceForm").addEventListener("submit", handleAttendanceSubmit);
+            
+            // Marks form
+            document.getElementById("marksForm").addEventListener("submit", handleMarksSubmit);
+            
+            // Tab switching
+            document.querySelectorAll(".tab").forEach(tab => {
+                tab.addEventListener("click", function() {
+                    const tabName = this.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+            
+            // Close modal when clicking outside
+            document.addEventListener("click", (e) => {
+                if (e.target.classList.contains("form-modal")) {
+                    closeModal("dynamicModal");
+                }
+            });
+
+            // Event delegation for star ratings
+            document.getElementById('reportsList').addEventListener('click', function(e) {
+                if (e.target.classList.contains('star')) {
+                    handleStarClick(e);
+                }
+                if (e.target.classList.contains('submit-feedback-btn')) {
+                    const reportId = parseInt(e.target.dataset.reportId);
+                    submitFeedback(reportId);
+                }
+            });
+        }
+
+        function updateLoginUI(type) {
+            const icon = loginTypeIcon.querySelector("i");
+            
+            switch(type) {
+                case "admin":
+                    loginTypeTitle.textContent = "Admin Login";
+                    icon.className = "fas fa-crown";
+                    loginTypeIcon.className = "login-icon admin";
+                    welcomeTitle.textContent = "Welcome admin!";
+                    usernameInput.placeholder = "admin";
+                    loginButton.className = "login-btn admin";
+                    break;
+                case "faculty":
+                    loginTypeTitle.textContent = "Faculty Login";
+                    icon.className = "fas fa-users";
+                    loginTypeIcon.className = "login-icon";
+                    welcomeTitle.textContent = "Welcome back!";
+                    usernameInput.placeholder = "faculty";
+                    loginButton.className = "login-btn faculty";
+                    break;
+                case "student":
+                    loginTypeTitle.textContent = "Student Login";
+                    icon.className = "fas fa-user-graduate";
+                    loginTypeIcon.className = "login-icon student";
+                    welcomeTitle.textContent = "Welcome student!";
+                    usernameInput.placeholder = "student";
+                    loginButton.className = "login-btn student";
+                    break;
+            }
+        }
+
+        // Authentication functions
+        async function handleLogin(e) {
+            e.preventDefault();
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const loginType = document.querySelector(".login-type-btn.active").dataset.type;
+
+            // Show loading state
+            loginBtnText.textContent = "Logging in...";
+            loginSpinner.style.display = "inline-block";
+            if (loginType === "student") {
+                loginSpinner.className = "spinner student";
+            } else if (loginType === "admin") {
+                loginSpinner.className = "spinner admin";
+            } else if (loginType === "faculty") {
+                loginSpinner.className = "spinner faculty";
+            } else {
+                loginSpinner.className = "spinner";
+            }
+            
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            let authenticated = false;
+            
+            // Authentication logic based on login type
+            switch(loginType) {
+                case "admin":
+                    if (username === "admin" && password === "admin123") {
+                        currentUser = "Administrator";
+                        currentUserType = "admin";
+                        authenticated = true;
+                    }
+                    break;
+                case "faculty":
+                    if (username === "faculty" && password === "faculty123") {
+                        currentUser = "Dr. Rohan Singh"; // Changed from Dr. Johnson
+                        currentUserType = "faculty";
+                        authenticated = true;
+                    } else if (username === "professor" && password === "professor123") {
+                        currentUser = "Prof. Priya Sharma"; // Changed from Prof. Smith
+                        currentUserType = "faculty";
+                        authenticated = true;
+                    }
+                    break;
+                case "student":
+                    if (username === "student" && password === "student123") {
+                        currentUser = "Arjun Kumar"; // Changed from John Doe
+                        currentUserType = "student";
+                        authenticated = true;
+                    } else if (username === "emma" && password === "emma123") {
+                        currentUser = "Sneha Gupta"; // Changed from Emma Wilson
+                        currentUserType = "student";
+                        authenticated = true;
+                    }
+                    break;
+            }
+
+            if (authenticated) {
+                showDashboard();
+            } else {
+                showMessage("Invalid credentials", "error");
+            }
+            
+            // Reset login button
+            loginBtnText.textContent = "Login";
+            loginSpinner.style.display = "none";
+        }
+
+        function showDashboard() {
+            loginScreen.style.display = "none";
+            dashboard.style.display = "flex";
+            
+            // Add role class to body for CSS targeting
+            document.body.className = `role-${currentUserType}`;
+
+            // Update user info
+            document.getElementById("headerUserName").textContent = currentUser;
+            document.getElementById("headerUserRole").textContent =
+                currentUserType.charAt(0).toUpperCase() + currentUserType.slice(1);
+            document.getElementById("userName").textContent = currentUser;
+            document.getElementById("userType").textContent = currentUserType.charAt(0).toUpperCase() + currentUserType.slice(1);
+            document.getElementById("welcomeUserName").textContent = currentUser;
+
+            // Update user initials
+            const initials = currentUser
+                .split(" ")
+                .map((n) => n[0])
+                .join("");
+            document.getElementById("userInitials").textContent = initials;
+            
+            // Update user avatar color based on role
+            const userAvatar = document.getElementById("userAvatar");
+            userAvatar.className = "user-avatar";
+            if (currentUserType === "student") {
+                userAvatar.classList.add("student");
+            } else if (currentUserType === "faculty") {
+                userAvatar.classList.add("faculty");
+            } else if (currentUserType === "admin") {
+                userAvatar.classList.add("admin");
+            }
+
+            // Save user to session storage
+            sessionStorage.setItem("currentUser", JSON.stringify({
+                name: currentUser,
+                type: currentUserType
+            }));
+
+            // Load appropriate content based on user type
+            if (currentUserType === "student") {
+                switchModule("results");
+            } else {
+                switchModule("dashboard");
+            }
+        }
+
+        function handleLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                currentUser = null;
+                currentUserType = null;
+                sessionStorage.removeItem("currentUser");
+                document.body.className = "";
+                loginScreen.style.display = "flex";
+                dashboard.style.display = "none";
+                resetForm();
+            }
+        }
+
+        function togglePasswordVisibility() {
+            passwordInput.type = showPasswordCheckbox.checked ? "text" : "password";
+        }
+
+        function resetForm() {
+            usernameInput.value = "";
+            passwordInput.value = "";
+            showPasswordCheckbox.checked = false;
+            passwordInput.type = "password";
+        }
+
+        // Navigation functions
+        function handleNavigation(e) {
+            e.preventDefault();
+
+            const module = this.dataset.module;
+            if (module) {
+                switchModule(module);
+            }
+        }
+
+        function switchModule(module) {
+            // Update active nav item
+            document.querySelectorAll(".nav-item").forEach((item) => {
+                item.classList.remove("active", "student-active", "faculty-active", "admin-active");
+            });
+
+            const navItem = document.querySelector(`[data-module="${module}"]`);
+            if (navItem) {
+                navItem.classList.add("active");
+                if (currentUserType === "student") {
+                    navItem.classList.add("student-active");
+                } else if (currentUserType === "faculty") {
+                    navItem.classList.add("faculty-active");
+                } else if (currentUserType === "admin") {
+                    navItem.classList.add("admin-active");
+                }
+            }
+
+            // Hide all module content
+            document.querySelectorAll(".module-content").forEach((content) => {
+                content.style.display = "none";
+            });
+
+            // Show selected module content
+            const moduleContent = document.getElementById(`${module}Content`);
+            if (moduleContent) {
+                moduleContent.style.display = "block";
+            }
+
+            // Update page title
+            document.getElementById("pageTitle").textContent = module.charAt(0).toUpperCase() + module.slice(1);
+
+            currentModule = module;
+
+            // Load module-specific data
+            loadModuleData(module);
+        }
+
+        function loadModuleData(module) {
+            switch (module) {
+                case "dashboard":
+                    loadDashboardData();
+                    break;
+                case "students":
+                    displayStudents();
+                    break;
+                case "faculty":
+                    displayFaculty();
+                    break;
+                case "courses":
+                    displayCourses();
+                    break;
+                case "subjects":
+                    displaySubjects();
+                    break;
+                case "attendance":
+                    displayAttendance();
+                    break;
+                case "marks":
+                    displayMarks();
+                    break;
+                case "results":
+                    displayStudentResults();
+                    break;
+                case "email":
+                    displayEmails();
+                    break;
+                case "users":
+                    displayUsers();
+                    break;
+                case "reports":
+                    displayReports();
+                    break;
+            }
+        }
+
+        function displayStudentResults() {
+            // Get current student's results
+            const studentName = currentUser;
+            const studentData = students.find(s => s.name === studentName);
+            
+            if (studentData) {
+                document.getElementById("resultStudentName").textContent = studentData.name;
+                document.getElementById("resultStudentId").textContent = studentData.rollNumber;
+                document.getElementById("resultStudentCourse").textContent = studentData.course;
+                document.getElementById("resultStudentSemester").textContent = "Spring 2023"; // Default semester
+            }
+            
+            // Get results for this student
+            const results = studentResults[studentName] || [];
+            const tableBody = document.getElementById("resultsTableBody");
+            
+            if (results.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No results available yet.</td></tr>`;
+                return;
+            }
+            
+            // Populate results table
+            tableBody.innerHTML = results.map(result => {
+                const percentage = (result.marksObtained / result.maxMarks) * 100;
+                let grade = "F";
+                let gradeClass = "grade-f";
+                
+                if (percentage >= 90) {
+                    grade = "A+";
+                    gradeClass = "grade-a";
+                } else if (percentage >= 80) {
+                    grade = "A";
+                    gradeClass = "grade-a";
+                } else if (percentage >= 70) {
+                    grade = "B+";
+                    gradeClass = "grade-b";
+                } else if (percentage >= 60) {
+                    grade = "B";
+                    gradeClass = "grade-b";
+                } else if (percentage >= 50) {
+                    grade = "C";
+                    gradeClass = "grade-c";
+                } else if (percentage >= 40) {
+                    grade = "D";
+                    gradeClass = "grade-c";
+                }
+                
+                return `
+                    <tr>
+                        <td>${result.subjectCode}</td>
+                        <td>${result.subjectName}</td>
+                        <td>${result.credits}</td>
+                        <td>${result.marksObtained}</td>
+                        <td>${result.maxMarks}</td>
+                        <td class="${gradeClass}">${grade}</td>
+                    </tr>
+                `;
+            }).join("");
+            
+            // Calculate and display summary
+            const totalCredits = results.reduce((sum, result) => sum + result.credits, 0);
+            const totalMarks = results.reduce((sum, result) => sum + result.marksObtained, 0);
+            const maxTotalMarks = results.reduce((sum, result) => sum + result.maxMarks, 0);
+            const overallPercentage = maxTotalMarks > 0 ? (totalMarks / maxTotalMarks) * 100 : 0;
+            
+            // Simple CGPA calculation (assuming 10 point scale)
+            const cgpa = overallPercentage / 9.5;
+            
+            document.getElementById("totalCredits").textContent = totalCredits;
+            document.getElementById("studentCGPA").textContent = cgpa.toFixed(2);
+            document.getElementById("studentPercentage").textContent = `${overallPercentage.toFixed(2)}%`;
+            document.getElementById("resultStatus").textContent = overallPercentage >= 40 ? "PASS" : "FAIL";
+        }
+
+        // Anonymous reporting functions
+        function showAnonymousReportForm() {
+            document.getElementById("anonymousReportForm").style.display = "block";
+        }
+
+        function hideAnonymousReportForm() {
+            document.getElementById("anonymousReportForm").style.display = "none";
+            document.getElementById("reportForm").reset();
+        }
+
+        async function handleAnonymousReport(e) {
+            e.preventDefault();
+            
+            const category = document.getElementById("reportCategory").value;
+            const priority = document.getElementById("reportPriority").value;
+            const description = document.getElementById("reportDescription").value;
+            
+            // Show loading state
+            const submitBtn = document.querySelector(".submit-report-btn");
+            const submitText = document.getElementById("submitReportText");
+            const reportSpinner = document.getElementById("reportSpinner");
+            
+            submitText.textContent = "Submitting...";
+            reportSpinner.style.display = "inline-block";
+            
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Generate a unique anonymous ID (this would be more secure in a real implementation)
+            const anonymousId = 'anon_' + Math.random().toString(36).substr(2, 9);
+            
+            // Create new report
+            const newReport = {
+                id: reports.length + 1,
+                title: `${category} issue`,
+                category: category,
+                priority: priority,
+                status: "pending",
+                date: new Date().toLocaleDateString(),
+                description: description,
+                anonymousId: anonymousId,
+                feedbackRating: null, // New property for feedback
+                // No user identification is stored
+            };
+            
+            // Add to reports
+            reports.unshift(newReport);
+            
+            // Update UI
+            displayReports();
+            updateReportStats();
+            
+            // Show success message
+            showMessage("Your report has been submitted anonymously. Thank you for your feedback.", "success");
+            
+            // Reset form
+            hideAnonymousReportForm();
+            
+            // Reset button
+            submitText.textContent = "Submit Anonymously";
+            reportSpinner.style.display = "none";
+        }
+
+        function updateReportStats() {
+            const total = reports.length;
+            const pending = reports.filter(r => r.status === "pending").length;
+            const inProgress = reports.filter(r => r.status === "inprogress").length;
+            const resolved = reports.filter(r => r.status === "resolved").length;
+            
+            document.getElementById("totalReports").textContent = total;
+            document.getElementById("pendingReports").textContent = pending;
+            document.getElementById("inProgressReports").textContent = inProgress;
+            document.getElementById("resolvedReports").textContent = resolved;
+        }
+
+        // Tab switching function
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        // Form submission handlers
+        function handleCourseSubmit(e) {
+            e.preventDefault();
+            
+            const code = document.getElementById("courseCode").value;
+            const name = document.getElementById("courseName").value;
+            const department = document.getElementById("courseDepartment").value;
+            const duration = document.getElementById("courseDuration").value;
+            
+            // Add new course
+            const newCourse = {
+                id: courses.length + 1,
+                code: code,
+                name: name,
+                department: department,
+                duration: duration
+            };
+            
+            courses.push(newCourse);
+            
+            // Update UI
+            displayCourses();
+            
+            // Show success message
+            showMessage("Course added successfully!", "success");
+            
+            // Switch back to course list
+            switchTab('course-list');
+            
+            // Reset form
+            document.getElementById("courseForm").reset();
+        }
+
+        function handleAttendanceSubmit(e) {
+            e.preventDefault();
+            
+            const date = document.getElementById("attendanceDate").value;
+            const subject = document.getElementById("attendanceSubject").value;
+            const period = document.getElementById("attendancePeriod").value;
+            
+            // Get attendance status for each student
+            const statusElements = document.querySelectorAll('.attendance-status');
+            const attendanceRecords = [];
+            
+            statusElements.forEach((select, index) => {
+                const studentId = document.querySelectorAll('#attendanceMarkingTable tr')[index].cells[0].textContent;
+                const studentName = document.querySelectorAll('#attendanceMarkingTable tr')[index].cells[1].textContent;
+                const status = select.value;
+                
+                attendanceRecords.push({
+                    studentId: studentId,
+                    studentName: studentName,
+                    status: status
+                });
+            });
+            
+            // Add to attendance records
+            attendanceRecords.forEach(record => {
+                attendance.push({
+                    id: attendance.length + 1,
+                    date: date,
+                    subject: subject,
+                    period: period,
+                    studentId: record.studentId,
+                    studentName: record.studentName,
+                    status: record.status
+                });
+            });
+            
+            // Show success message
+            showMessage("Attendance recorded successfully!", "success");
+            
+            // Reset form
+            document.getElementById("attendanceForm").reset();
+        }
+
+        function handleMarksSubmit(e) {
+            e.preventDefault();
+            
+            const subject = document.getElementById("marksSubject").value;
+            const examType = document.getElementById("marksExamType").value;
+            const date = document.getElementById("marksDate").value;
+            const maxMarks = document.getElementById("maxMarks").value;
+            
+            // Get marks for each student
+            const marksElements = document.querySelectorAll('.marks-obtained');
+            const marksRecords = [];
+            
+            marksElements.forEach((input, index) => {
+                const studentId = document.querySelectorAll('#marksEntryTable tr')[index].cells[0].textContent;
+                const studentName = document.querySelectorAll('#marksEntryTable tr')[index].cells[1].textContent;
+                const marksObtained = input.value;
+                
+                if (marksObtained) {
+                    marksRecords.push({
+                        studentId: studentId,
+                        studentName: studentName,
+                        marks: marksObtained
+                    });
+                }
+            });
+            
+            // Add to marks records
+            marksRecords.forEach(record => {
+                marks.push({
+                    id: marks.length + 1,
+                    date: date,
+                    subject: subject,
+                    examType: examType,
+                    studentId: record.studentId,
+                    studentName: record.studentName,
+                    marksObtained: record.marks,
+                    maxMarks: maxMarks
+                });
+            });
+            
+            // Show success message
+            showMessage("Marks recorded successfully!", "success");
+            
+            // Reset form
+            document.getElementById("marksForm").reset();
+            
+            // Clear marks inputs
+            document.querySelectorAll('.marks-obtained').forEach(input => {
+                input.value = '';
+            });
+        }
+
+        // Load sample student results
+        function loadSampleResults() {
+            studentResults = {
+                "Arjun Kumar": [
+                    {
+                        subjectCode: "CS101",
+                        subjectName: "Introduction to Programming",
+                        credits: 4,
+                        marksObtained: 85,
+                        maxMarks: 100
+                    },
+                    {
+                        subjectCode: "MATH101",
+                        subjectName: "Calculus I",
+                        credits: 3,
+                        marksObtained: 78,
+                        maxMarks: 100
+                    },
+                    {
+                        subjectCode: "PHYS101",
+                        subjectName: "Physics I",
+                        credits: 3,
+                        marksObtained: 92,
+                        maxMarks: 100
+                    },
+                    {
+                        subjectCode: "ENG101",
+                        subjectName: "English Composition",
+                        credits: 3,
+                        marksObtained: 88,
+                        maxMarks: 100
+                    },
+                    {
+                        subjectCode: "CS102",
+                        subjectName: "Data Structures",
+                        credits: 4,
+                        marksObtained: 91,
+                        maxMarks: 100
+                    }
+                ],
+                "Sneha Gupta": [
+                    {
+                        subjectCode: "CS101",
+                        subjectName: "Introduction to Programming",
+                        credits: 4,
+                        marksObtained: 92,
+                        maxMarks: 100
+                    },
+                    {
+                        subjectCode: "MATH101",
+                        subjectName: "Calculus I",
+                        credits: 3,
+                        marksObtained: 85,
+                        maxMarks: 100
+                    },
+                    {
+                        subjectCode: "PHYS101",
+                        subjectName: "Physics I",
+                        credits: 3,
+                        marksObtained: 88,
+                        maxMarks: 100
+                    },
+                    {
+                        subjectCode: "ENG101",
+                        subjectName: "English Composition",
+                        credits: 3,
+                        marksObtained: 95,
+                        maxMarks: 100
+                    },
+                    {
+                        subjectCode: "CS102",
+                        subjectName: "Data Structures",
+                        credits: 4,
+                        marksObtained: 90,
+                        maxMarks: 100
+                    }
+                ]
+            };
+        }
+
+        // Load sample data
+        function loadSampleData() {
+            // Sample students
+            students = [
+                {
+                    id: 1,
+                    name: "Arjun Kumar",
+                    email: "arjun.kumar@example.com",
+                    course: "Computer Science",
+                    year: "2nd Year",
+                    rollNumber: "CS2024001",
+                    phone: "+919876543210",
+                },
+                {
+                    id: 2,
+                    name: "Sneha Gupta",
+                    email: "sneha.gupta@example.com",
+                    course: "Information Technology",
+                    year: "3rd Year",
+                    rollNumber: "IT2023001",
+                    phone: "+919876543211",
+                },
+                {
+                    id: 3,
+                    name: "Rahul Mehra",
+                    email: "rahul.mehra@example.com",
+                    course: "Computer Science",
+                    year: "2nd Year",
+                    rollNumber: "CS2024002",
+                    phone: "+919876543212",
+                },
+                {
+                    id: 4,
+                    name: "Anjali Verma",
+                    email: "anjali.verma@example.com",
+                    course: "Electronics",
+                    year: "1st Year",
+                    rollNumber: "EC2025001",
+                    phone: "+919876543213",
+                }
+            ];
+
+            // Sample faculty
+            faculty = [
+                {
+                    id: 1,
+                    name: "Dr. Rohan Singh",
+                    email: "rohan.singh@college.edu",
+                    department: "Computer Science",
+                    subject: "Data Structures",
+                    phone: "+919123456780",
+                    experience: "10 years",
+                },
+                {
+                    id: 2,
+                    name: "Prof. Priya Sharma",
+                    email: "priya.sharma@college.edu",
+                    department: "Information Technology",
+                    subject: "Database Management",
+                    phone: "+919123456781",
+                    experience: "8 years",
+                },
+                {
+                    id: 3,
+                    name: "Dr. Vikram Patel",
+                    email: "vikram.patel@college.edu",
+                    department: "Mathematics",
+                    subject: "Calculus",
+                    phone: "+919123456782",
+                    experience: "12 years",
+                }
+            ];
+
+            // Sample courses
+            courses = [
+                {
+                    id: 1,
+                    code: "CS101",
+                    name: "Computer Science",
+                    department: "cs",
+                    duration: "4 years",
+                },
+                {
+                    id: 2,
+                    code: "IT201",
+                    name: "Information Technology",
+                    department: "it",
+                    duration: "4 years",
+                },
+                {
+                    id: 3,
+                    code: "EC301",
+                    name: "Electronics",
+                    department: "ece",
+                    duration: "4 years",
+                },
+                {
+                    id: 4,
+                    code: "ME401",
+                    name: "Mechanical Engineering",
+                    department: "mech",
+                    duration: "4 years",
+                }
+            ];
+
+            // Sample subjects
+            subjects = [
+                {
+                    id: 1,
+                    name: "Data Structures",
+                    code: "CS201",
+                    course: "Computer Science",
+                    credits: "3",
+                    semester: "3",
+                    description: "Introduction to data structures and algorithms",
+                },
+                {
+                    id: 2,
+                    name: "Database Management",
+                    code: "IT301",
+                    course: "Information Technology",
+                    credits: "4",
+                    semester: "5",
+                    description: "Database design and management systems",
+                },
+                {
+                    id: 3,
+                    name: "Calculus I",
+                    code: "MATH101",
+                    course: "All Engineering",
+                    credits: "4",
+                    semester: "1",
+                    description: "Differential and integral calculus",
+                }
+            ];
+
+            // Sample attendance
+            attendance = [
+                {
+                    id: 1,
+                    date: "2023-05-15",
+                    subject: "CS101 - Programming",
+                    period: "1",
+                    studentId: "CS2024001",
+                    studentName: "Arjun Kumar",
+                    status: "present"
+                },
+                {
+                    id: 2,
+                    date: "2023-05-15",
+                    subject: "CS101 - Programming",
+                    period: "1",
+                    studentId: "IT2023001",
+                    studentName: "Sneha Gupta",
+                    status: "present"
+                },
+                {
+                    id: 3,
+                    date: "2023-05-15",
+                    subject: "CS101 - Programming",
+                    period: "1",
+                    studentId: "CS2024002",
+                    studentName: "Rahul Mehra",
+                    status: "absent"
+                }
+            ];
+
+            // Sample marks
+            marks = [
+                {
+                    id: 1,
+                    date: "2023-04-20",
+                    subject: "CS101 - Programming",
+                    examType: "midterm",
+                    studentId: "CS2024001",
+                    studentName: "Arjun Kumar",
+                    marksObtained: 85,
+                    maxMarks: 100
+                },
+                {
+                    id: 2,
+                    date: "2023-04-20",
+                    subject: "CS101 - Programming",
+                    examType: "midterm",
+                    studentId: "IT2023001",
+                    studentName: "Sneha Gupta",
+                    marksObtained: 92,
+                    maxMarks: 100
+                },
+                {
+                    id: 3,
+                    date: "2023-04-20",
+                    subject: "CS101 - Programming",
+                    examType: "midterm",
+                    studentId: "CS2024002",
+                    studentName: "Rahul Mehra",
+                    marksObtained: 78,
+                    maxMarks: 100
+                }
+            ];
+
+            // Sample reports
+            reports = [
+                {
+                    id: 1,
+                    title: "Infrastructure Issues",
+                    category: "infrastructure",
+                    priority: "High",
+                    status: "inprogress",
+                    date: "2023-05-10",
+                    description: "Several computers in Lab A are not functioning properly and need repair.",
+                    anonymousId: "anon_a1b2c3d4e",
+                    feedbackRating: null,
+                },
+                {
+                    id: 2,
+                    title: "Library Resources",
+                    category: "academic",
+                    priority: "Medium",
+                    status: "pending",
+                    date: "2023-05-12",
+                    description: "Need more reference books for the Computer Science department.",
+                    anonymousId: "anon_f5g6h7i8j",
+                    feedbackRating: null,
+                },
+                {
+                    id: 3,
+                    title: "Safety Concern",
+                    category: "safety",
+                    priority: "Critical",
+                    status: "resolved",
+                    date: "2023-05-05",
+                    description: "Broken staircase near the east wing building needs immediate attention.",
+                    anonymousId: "anon_k9l0m1n2o",
+                    feedbackRating: 4, // Example of already-given feedback
+                }
+            ];
+
+            // Load sample results
+            loadSampleResults();
+        }
+
+        // Show message function
+        function showMessage(message, type) {
+            // Create message element
+            const messageEl = document.createElement("div");
+            messageEl.className = `message ${type}`;
+            messageEl.textContent = message;
+            
+            // Add to content area
+            const contentArea = document.getElementById("contentArea");
+            contentArea.insertBefore(messageEl, contentArea.firstChild);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                messageEl.remove();
+            }, 3000);
+        }
+
+        // Toggle sidebar function
+        function toggleSidebar() {
+            const sidebar = document.querySelector(".sidebar");
+            sidebar.classList.toggle("mobile-open");
+        }
+
+        // Toggle theme function
+        function toggleTheme() {
+            document.body.classList.toggle("dark-theme");
+            localStorage.setItem("cms_theme", document.body.classList.contains("dark-theme") ? "dark" : "light");
+
+            const themeBtn = document.querySelector(".header-btn i.fa-moon, .header-btn i.fa-sun");
+            if (themeBtn) {
+                themeBtn.className = document.body.classList.contains("dark-theme") ? "fas fa-sun" : "fas fa-moon";
+            }
+        }
+
+        // Show notifications function
+        function showNotifications() {
+            // This would open a notifications modal
+            alert("Notifications feature would be implemented here");
+        }
+
+        // Close modal function
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Load all data function
+        function loadAllData() {
+            // This would load data from localStorage
+            // For now, we'll just load sample data
+            loadSampleData();
+        }
+
+        // Update stats counts function
+        function updateStatsCounts() {
+            // Update the stats numbers on the dashboard
+            document.getElementById("studentsCount").textContent = students.length;
+            document.getElementById("facultyCount").textContent = faculty.length;
+            document.getElementById("coursesCount").textContent = courses.length;
+            document.getElementById("subjectsCount").textContent = subjects.length;
+            
+            // Update report stats
+            updateReportStats();
+        }
+
+        // Display functions for all modules
+        function displayStudents() {
+            const container = document.getElementById("studentsList");
+            container.innerHTML = students.map(student => `
+                <div class="data-item">
+                    <div class="data-info">
+                        <div class="data-field">
+                            <h4>Name</h4>
+                            <p>${student.name}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Email</h4>
+                            <p>${student.email}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Course</h4>
+                            <p>${student.course}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Year</h4>
+                            <p>${student.year}</p>
+                        </div>
+                    </div>
+                    <div class="data-actions admin-only-flex">
+                        <button class="action-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayFaculty() {
+            const container = document.getElementById("facultyList");
+            container.innerHTML = faculty.map(member => `
+                <div class="data-item">
+                    <div class="data-info">
+                        <div class="data-field">
+                            <h4>Name</h4>
+                            <p>${member.name}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Email</h4>
+                            <p>${member.email}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Department</h4>
+                            <p>${member.department}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Subject</h4>
+                            <p>${member.subject}</p>
+                        </div>
+                    </div>
+                    <div class="data-actions admin-only-flex">
+                        <button class="action-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayCourses() {
+            const tableBody = document.getElementById("coursesTableBody");
+            
+            if (courses.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">No courses available yet.</td></tr>`;
+                return;
+            }
+            
+            tableBody.innerHTML = courses.map(course => {
+                const departmentNames = {
+                    'cs': 'Computer Science',
+                    'it': 'Information Technology',
+                    'ece': 'Electronics',
+                    'mech': 'Mechanical Engineering'
+                };
+                
+                return `
+                    <tr>
+                        <td>${course.code}</td>
+                        <td>${course.name}</td>
+                        <td>${departmentNames[course.department] || course.department}</td>
+                        <td>${course.duration}</td>
+                        <td>
+                            <div class="data-actions admin-only-flex">
+                                <button class="action-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function displaySubjects() {
+            const container = document.getElementById("subjectsList");
+            container.innerHTML = subjects.map(subject => `
+                <div class="data-item">
+                    <div class="data-info">
+                        <div class="data-field">
+                            <h4>Subject Name</h4>
+                            <p>${subject.name}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Subject Code</h4>
+                            <p>${subject.code}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Course</h4>
+                            <p>${subject.course}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Credits</h4>
+                            <p>${subject.credits}</p>
+                        </div>
+                    </div>
+                    <div class="data-actions admin-only-flex">
+                        <button class="action-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayAttendance() {
+            const container = document.getElementById("attendanceList");
+            container.innerHTML = attendance.map(record => `
+                <div class="data-item">
+                    <div class="data-info">
+                        <div class="data-field">
+                            <h4>Student</h4>
+                            <p>${record.studentName}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Subject</h4>
+                            <p>${record.subject}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Date</h4>
+                            <p>${record.date}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Period</h4>
+                            <p>${record.period}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Status</h4>
+                            <p><span class="status-badge ${record.status}">${record.status}</span></p>
+                        </div>
+                    </div>
+                    <div class="data-actions faculty-only-flex">
+                        <button class="action-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayMarks() {
+            const container = document.getElementById("marksList");
+            container.innerHTML = marks.map(mark => `
+                <div class="data-item">
+                    <div class="data-info">
+                        <div class="data-field">
+                            <h4>Student</h4>
+                            <p>${mark.studentName}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Subject</h4>
+                            <p>${mark.subject}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Exam Type</h4>
+                            <p>${mark.examType}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Marks</h4>
+                            <p>${mark.marksObtained}/${mark.maxMarks}</p>
+                        </div>
+                        <div class="data-field">
+                            <h4>Percentage</h4>
+                            <p>${((mark.marksObtained / mark.maxMarks) * 100).toFixed(2)}%</p>
+                        </div>
+                    </div>
+                    <div class="data-actions faculty-only-flex">
+                        <button class="action-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayReports() {
+            const container = document.getElementById("reportsList");
+            
+            if (reports.length === 0) {
+                container.innerHTML = `
+                    <div class="report-item">
+                        <div class="report-description">
+                            <p style="text-align: center; padding: 2rem;">No anonymous reports have been submitted yet.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = reports.map(report => {
+                // Format category for display
+                const categoryDisplay = {
+                    'academic': 'Academic',
+                    'faculty': 'Faculty',
+                    'infrastructure': 'Infrastructure',
+                    'harassment': 'Harassment',
+                    'safety': 'Safety',
+                    'administrative': 'Administrative',
+                    'other': 'Other'
+                }[report.category] || report.category;
+                
+                // **Generate feedback section HTML**
+                let feedbackHTML = '';
+                if (report.status === 'resolved') {
+                    if (report.feedbackRating) {
+                        // If feedback is given, display it
+                        let stars = '';
+                        for (let i = 1; i <= 5; i++) {
+                            stars += `<i class="fas fa-star star ${i <= report.feedbackRating ? 'selected' : ''}"></i>`;
+                        }
+                        feedbackHTML = `
+                            <div class="feedback-section">
+                                <div class="feedback-display">
+                                    <p>Feedback Received:</p>
+                                    <div class="feedback-stars">${stars}</div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        // If no feedback, show the rating form
+                        feedbackHTML = `
+                            <div class="feedback-section">
+                                <p>This report is resolved. Please provide your feedback on the resolution:</p>
+                                <div class="feedback-form-container">
+                                    <div class="feedback-stars" data-report-id="${report.id}">
+                                        <i class="fas fa-star star" data-value="1"></i>
+                                        <i class="fas fa-star star" data-value="2"></i>
+                                        <i class="fas fa-star star" data-value="3"></i>
+                                        <i class="fas fa-star star" data-value="4"></i>
+                                        <i class="fas fa-star star" data-value="5"></i>
+                                    </div>
+                                    <button class="submit-feedback-btn" data-report-id="${report.id}">Submit</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                return `
+                    <div class="report-item">
+                        <div class="report-header">
+                            <div class="report-title">
+                                <h4>${report.title}</h4>
+                                <div class="report-meta">
+                                    <span>📅 ${report.date}</span>
+                                    <span>🔒 Anonymous Report</span>
+                                </div>
+                            </div>
+                            <div class="report-badges">
+                                <span class="priority-badge ${report.priority.toLowerCase()}">${report.priority}</span>
+                                <span class="status-badge ${report.status.toLowerCase().replace(" ", "-")}">${report.status}</span>
+                                <span class="category-badge">${categoryDisplay}</span>
+                            </div>
+                        </div>
+                        <div class="report-description">
+                            ${report.description}
+                        </div>
+                        <div class="report-footer">
+                            <div class="report-footer-actions">
+                                <div class="reporter-info">
+                                    📋 Report #${report.id} | Anonymous ID: ${report.anonymousId}
+                                </div>
+                                <div class="report-actions admin-only-flex faculty-only-flex">
+                                    <button class="status-update-btn" onclick="updateReportStatus(${report.id})">
+                                        Update Status
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteReport(${report.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            ${feedbackHTML} 
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // **New functions for feedback**
+        function handleStarClick(e) {
+            const star = e.target;
+            const rating = parseInt(star.dataset.value);
+            const starsContainer = star.parentElement;
+            
+            // Remove 'selected' from all stars in this container
+            starsContainer.querySelectorAll('.star').forEach(s => s.classList.remove('selected'));
+            
+            // Add 'selected' to clicked star and all previous stars
+            for (let i = 1; i <= rating; i++) {
+                starsContainer.querySelector(`.star[data-value="${i}"]`).classList.add('selected');
+            }
+            
+            // Store the rating on the container for submission
+            starsContainer.dataset.rating = rating;
+        }
+
+        function submitFeedback(reportId) {
+            const starsContainer = document.querySelector(`.feedback-stars[data-report-id="${reportId}"]`);
+            const rating = parseInt(starsContainer.dataset.rating);
+
+            if (!rating) {
+                showMessage("Please select a star rating before submitting.", "error");
+                return;
+            }
+
+            const report = reports.find(r => r.id === reportId);
+            if (report) {
+                report.feedbackRating = rating;
+                showMessage("Thank you for your feedback!", "success");
+                displayReports(); // Re-render the reports to show the change
+            }
+        }
+
+
+        function updateReportStatus(reportId) {
+            const report = reports.find(r => r.id === reportId);
+            if (!report) return;
+            
+            const newStatus = prompt("Update report status:\n\nEnter 'pending', 'inprogress', or 'resolved'", report.status);
+            
+            if (newStatus && ['pending', 'inprogress', 'resolved'].includes(newStatus.toLowerCase())) {
+                report.status = newStatus.toLowerCase();
+                displayReports();
+                updateReportStats();
+                showMessage("Report status updated successfully", "success");
+            }
+        }
+
+        function deleteReport(reportId) {
+            if (confirm("Are you sure you want to delete this report? This action cannot be undone.")) {
+                reports = reports.filter(r => r.id !== reportId);
+                displayReports();
+                updateReportStats();
+                showMessage("Report deleted successfully", "success");
+            }
+        }
+
+        function displayEmails() {
+            document.getElementById("emailList").innerHTML = "<p>Email management would be displayed here</p>";
+        }
+
+        function displayUsers() {
+            document.getElementById("usersList").innerHTML = "<p>User management would be displayed here</p>";
+        }
+
+        // Load dashboard data
+        function loadDashboardData() {
+            const recentStudentsContainer = document.getElementById("recentStudents");
+            const recentFacultyContainer = document.getElementById("recentFaculty");
+            
+            recentStudentsContainer.innerHTML = students.slice(0, 3).map(student => `
+                <div class="recent-item">
+                    <div class="recent-info">
+                        <h4>${student.name}</h4>
+                        <p>${student.course}</p>
+                    </div>
+                    <span class="status-badge active">Active</span>
+                </div>
+            `).join('');
+            
+            recentFacultyContainer.innerHTML = faculty.slice(0, 3).map(member => `
+                <div class="recent-item">
+                    <div class="recent-info">
+                        <h4>${member.name}</h4>
+                        <p>${member.department}</p>
+                    </div>
+                    <span class="experience-badge">${member.experience}</span>
+                </div>
+            `).join('');
+        }
+
+        // Search function
+        function searchData(type, query) {
+            console.log(`Searching ${type} for: ${query}`);
+            // Actual search implementation would go here
+        }
+
+        // Show add form function
+        function showAddForm(type) {
+            alert(`Add ${type} form would be displayed here`);
+        }
+    </script>
+</body>
+</html>
